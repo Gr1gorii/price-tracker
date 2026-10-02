@@ -8,6 +8,7 @@ timezone: Europe/Rome
 slots: [8, 20]              # local hours of the two daily runs
 slot_window_minutes: 210    # a slot may start up to 3.5 h late (GitHub cron delays)
 start_date: "2026-10-10"    # first expected slot, used for missing-slot reports
+end_date: "2026-12-01"      # last collection day (inclusive); scheduled runs stop after it
 
 min_interval_s: 5.0         # >= 5 s between requests to one domain (hard minimum)
 max_crawl_delay_s: 30.0     # robots.txt Crawl-delay above this -> warn, still honoured

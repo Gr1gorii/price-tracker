@@ -34,6 +34,8 @@ def current_slot(settings: Settings, at: datetime | None = None) -> Slot | None:
     """The scheduled slot whose window contains `at`, or None."""
     tz = ZoneInfo(settings.timezone)
     local = (at or now_utc()).astimezone(tz)
+    if settings.end_date and local.date() > date.fromisoformat(settings.end_date):
+        return None  # collection period is over
     for hour in settings.slots:
         start = local.replace(hour=hour, minute=0, second=0, microsecond=0)
         if start <= local < start + timedelta(minutes=settings.slot_window_minutes):
@@ -69,8 +71,11 @@ def expected_slots(settings: Settings, until: datetime | None = None) -> list[st
     tz = ZoneInfo(settings.timezone)
     until_local = (until or now_utc()).astimezone(tz)
     d = date.fromisoformat(settings.start_date)
+    last = until_local.date()
+    if settings.end_date:
+        last = min(last, date.fromisoformat(settings.end_date))
     out: list[str] = []
-    while d <= until_local.date():
+    while d <= last:
         for hour in settings.slots:
             start = datetime(d.year, d.month, d.day, hour, tzinfo=tz)
             if start + timedelta(minutes=settings.slot_window_minutes) <= until_local:

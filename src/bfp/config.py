@@ -48,6 +48,7 @@ class Settings(BaseModel):
     slots: list[int] = [8, 20]
     slot_window_minutes: int = 210
     start_date: str = "2026-10-10"
+    end_date: str | None = "2026-12-01"  # last day with scheduled slots (inclusive)
     min_interval_s: float = 5.0
     max_crawl_delay_s: float = 30.0
     timeout_s: float = 30.0

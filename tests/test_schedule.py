@@ -44,6 +44,12 @@ def test_every_cron_firing_maps_to_each_slot_exactly_once(settings):
         assert {s.label for s in labels} == {f"{day}T08", f"{day}T20"}
 
 
+def test_no_slots_after_end_date(settings):
+    assert current_slot(settings, utc("2026-12-01 19:05")).label == "2026-12-01T20"
+    assert current_slot(settings, utc("2026-12-02 07:05")) is None
+    assert expected_slots(settings, utc("2026-12-05 12:00"))[-1] == "2026-12-01T20"
+
+
 def test_manual_slot(settings):
     s = manual_slot(settings, utc("2026-10-02 13:30"))
     assert s.label == "2026-10-02T1530m" and not s.scheduled and s.file_prefix == "1530m"
