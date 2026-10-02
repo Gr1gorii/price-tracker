@@ -8,6 +8,11 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 LOG_DIR="$HOME/Library/Logs/bfp"; mkdir -p "$LOG_DIR"
 {
   echo "=== $(date '+%F %T %Z') ==="
+  # Backup trigger for the GitHub runner (its cron is sometimes late or dropped): queue the
+  # workflow once per new slot; its own gate makes this a no-op if the slot is already done.
+  if uv run bfp gate --runner local 2>/dev/null | grep -q '^run=true'; then
+    gh workflow run collect.yml >/dev/null 2>&1 && echo "queued GitHub collect (backup trigger)"
+  fi
   # caffeinate -i: no idle sleep while collecting (a closed lid on battery still sleeps)
   out=$(caffeinate -i uv run bfp collect --runner local --scheduled 2>&1); rc=$?
   echo "$out"
