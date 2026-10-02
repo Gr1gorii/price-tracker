@@ -27,8 +27,6 @@ def utc(s: str) -> datetime:
         ("2026-10-28 19:00", "2026-10-28T20"),
         ("2026-11-27 07:05", "2026-11-27T08"),   # Black Friday
         ("2026-11-27 20:40", "2026-11-27T20"),   # winter backup firing 21:40 CET
-        # DST starts 28 Mar 2027
-        ("2027-03-28 06:00", "2027-03-28T08"),
     ],
 )
 def test_current_slot(settings, when, expected):
@@ -42,6 +40,12 @@ def test_every_cron_firing_maps_to_each_slot_exactly_once(settings):
     for day in ("2026-10-12", "2026-11-12"):
         labels = {current_slot(settings, utc(f"{day} {t}")) for t in crons} - {None}
         assert {s.label for s in labels} == {f"{day}T08", f"{day}T20"}
+
+
+def test_dst_start_without_end_date(settings):
+    settings.end_date = None
+    assert current_slot(settings, utc("2027-03-28 06:00")).label == "2027-03-28T08"  # CEST again
+    assert current_slot(settings, utc("2027-03-28 07:05")).label == "2027-03-28T08"
 
 
 def test_no_slots_after_end_date(settings):
