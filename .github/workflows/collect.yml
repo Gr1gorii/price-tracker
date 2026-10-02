@@ -43,7 +43,7 @@ jobs:
         id: gate
         run: uv run bfp gate --runner actions ${{ inputs.force && '--force' || '' }}
 
-      - name: Install Playwright (only if an actions shop has render: true)
+      - name: "Install Playwright (only if an actions shop has render: true)"
         if: steps.gate.outputs.run == 'true'
         run: |
           if grep -Eq '^\s*render:\s*true' config/shops.yaml; then
