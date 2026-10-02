@@ -3,6 +3,7 @@
 # Optional: BFP_GIT_SYNC=1 to commit & push collected data.
 set -u
 cd "${0:A:h}/.."
+[[ -f .env ]] && { set -a; source ./.env; set +a; }   # BFP_CONTACT_EMAIL, BFP_GIT_SYNC, TELEGRAM_*
 export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 LOG_DIR="$HOME/Library/Logs/bfp"; mkdir -p "$LOG_DIR"
 {
@@ -13,7 +14,8 @@ LOG_DIR="$HOME/Library/Logs/bfp"; mkdir -p "$LOG_DIR"
     uv run bfp health --alert
     if [[ "${BFP_GIT_SYNC:-0}" == "1" ]]; then
       git add data/observations data/health data/state
-      git diff --cached --quiet || git commit -m "data: local run $(date '+%F %H:%M')" && git pull --rebase --autostash && git push
+      git diff --cached --quiet || git commit -q -m "data: local run $(date '+%F %H:%M')"
+      git pull -q --rebase --autostash && git push -q
     fi
   fi
 } >> "$LOG_DIR/collector.log" 2>&1

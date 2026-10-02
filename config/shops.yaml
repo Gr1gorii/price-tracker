@@ -29,7 +29,8 @@ shops:
     domain: www.toyscenter.it
     enabled: true
     render: false
-    runner: actions
+    runner: local         # 2026-10-02: GitHub IPs got 403 after ~28 min (214 pages + 124 API calls)
+    min_interval_s: 10    # heavier pages (2.5 MB) → slower than the 5 s minimum
     notes: >-
       2026-10-02: robots.txt 200, 18 rules ('*orderby', '*filter'…), no Crawl-delay.
       Terms of use (/terms-of-use/): personal non-commercial use, 'autorizzato unicamente a visualizzare',
@@ -59,7 +60,7 @@ shops:
     domain: www.notino.it
     enabled: true
     render: false
-    runner: actions
+    runner: local         # 2026-10-02: GitHub (datacenter) IPs get 403 on the first request; home IP works
     notes: >-
       2026-10-02: robots.txt 200, 29 rules. Terms: only sales conditions (/condizioni-generali/),
       no site-use / automated-access clause found. Enabled 2026-10-02.
