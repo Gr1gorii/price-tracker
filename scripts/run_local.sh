@@ -8,7 +8,8 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 LOG_DIR="$HOME/Library/Logs/bfp"; mkdir -p "$LOG_DIR"
 {
   echo "=== $(date '+%F %T %Z') ==="
-  out=$(uv run bfp collect --runner local --scheduled 2>&1); rc=$?
+  # caffeinate -i: no idle sleep while collecting (a closed lid on battery still sleeps)
+  out=$(caffeinate -i uv run bfp collect --runner local --scheduled 2>&1); rc=$?
   echo "$out"
   if [[ $rc -eq 0 && "$out" != nothing\ to\ do* ]]; then
     uv run bfp health --alert
