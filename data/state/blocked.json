@@ -1,0 +1,12 @@
+{
+  "notino": {
+    "since": "2026-10-02T13:43:16+00:00",
+    "run_id": "2026-10-02T1542m__actions",
+    "reason": "3 block signals (last: HTTP 403)"
+  },
+  "toyscenter": {
+    "since": "2026-10-02T14:11:41+00:00",
+    "run_id": "2026-10-02T1542m__actions",
+    "reason": "3 block signals (last: HTTP 403)"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "run_id": "2026-10-02T1542m__actions",
+  "slot": "2026-10-02T1542m",
+  "runner": "actions",
+  "scheduled": false,
+  "started_at": "2026-10-02T13:43:01+00:00",
+  "finished_at": "2026-10-02T14:24:19+00:00",
+  "collector_version": "0.1.0",
+  "shops": {
+    "euronics": {
+      "counts": {
+        "ok": 495
+      },
+      "total": 495,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 496,
+      "seconds": 2478.5,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-02/1542m__actions__euronics.parquet"
+    },
+    "lookfantastic": {
+      "counts": {
+        "ok": 273
+      },
+      "total": 273,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 274,
+      "seconds": 1366.6,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-02/1542m__actions__lookfantastic.parquet"
+    },
+    "notino": {
+      "counts": {
+        "blocked": 3,
+        "skipped_blocked": 346
+      },
+      "total": 349,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 4,
+      "seconds": 15.2,
+      "stopped_reason": "3 block signals (last: HTTP 403)",
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-02/1542m__actions__notino.parquet"
+    },
+    "tigota": {
+      "counts": {
+        "ok": 320
+      },
+      "total": 320,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 321,
+      "seconds": 1602.3,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-02/1542m__actions__tigota.parquet"
+    },
+    "toyscenter": {
+      "counts": {
+        "ok": 212,
+        "blocked": 3,
+        "skipped_blocked": 132
+      },
+      "total": 347,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 340,
+      "seconds": 1719.8,
+      "stopped_reason": "3 block signals (last: HTTP 403)",
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-02/1542m__actions__toyscenter.parquet"
+    }
+  }
+}
