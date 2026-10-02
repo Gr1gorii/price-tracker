@@ -1,0 +1,46 @@
+{
+  "callister-idea-regalo-con-5-minifigure-set-per-adulti-21330": {
+    "url": "https://www.toyscenter.it/prodotto/lego-ideas-mamma-ho-perso-laereo-casa-di-kevin-mccallister-idea-regalo-con-5-minifigure-set-per-adulti-21330/",
+    "status": "ok",
+    "parse_method": "jsonld",
+    "price": "298.02",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": "299.99",
+    "displayed_low30_price": null,
+    "displayed_discount_pct": "1.00",
+    "availability": "InStock"
+  },
+  "odotto-lego-technic-hypercar-koenigsegg-sadairs-spear-42232": {
+    "url": "https://www.toyscenter.it/prodotto/lego-technic-hypercar-koenigsegg-sadairs-spear-42232/",
+    "status": "ok",
+    "parse_method": "jsonld",
+    "price": "404.99",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": "449.99",
+    "displayed_low30_price": null,
+    "displayed_discount_pct": "10.00",
+    "availability": "InStock"
+  },
+  "www-toyscenter-it-prodotto-barbie-vinyl-player": {
+    "url": "https://www.toyscenter.it/prodotto/barbie-vinyl-player/",
+    "status": "ok",
+    "parse_method": "jsonld",
+    "price": "99.99",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": null,
+    "displayed_low30_price": null,
+    "displayed_discount_pct": null,
+    "availability": "InStock"
+  },
+  "it-prodotto-hot-wheels-racing-formula-1-griglia-di-partenza": {
+    "url": "https://www.toyscenter.it/prodotto/hot-wheels-racing-formula-1-griglia-di-partenza/",
+    "status": "ok",
+    "parse_method": "jsonld",
+    "price": "36.99",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": null,
+    "displayed_low30_price": null,
+    "displayed_discount_pct": null,
+    "availability": "InStock"
+  }
+}

@@ -1,0 +1,86 @@
+name: collect
+
+# GitHub cron is UTC-only and often late. We fire at every UTC hour that can be
+# 08:00 / 20:00 Europe/Rome (CEST = UTC+2 until 25 Oct 2026, CET = UTC+1 after)
+# plus a backup firing; `bfp gate` decides in Rome time and runs each slot once.
+on:
+  schedule:
+    - cron: "0 6,7 * * *"   # 08:00 Rome in CEST / CET
+    - cron: "40 8 * * *"    # backup: 10:40 CEST / 09:40 CET
+    - cron: "0 18,19 * * *" # 20:00 Rome in CEST / CET
+    - cron: "40 20 * * *"   # backup: 22:40 CEST / 21:40 CET
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Collect now even outside a slot window"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collector
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    env:
+      BFP_CONTACT_EMAIL: ${{ secrets.BFP_CONTACT_EMAIL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --frozen
+
+      - name: Gate
+        id: gate
+        run: uv run bfp gate --runner actions ${{ inputs.force && '--force' || '' }}
+
+      - name: Install Playwright (only if an actions shop has render: true)
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          if grep -Eq '^\s*render:\s*true' config/shops.yaml; then
+            uv sync --frozen --extra render
+            uv run playwright install --with-deps chromium
+          fi
+
+      - name: Collect
+        if: steps.gate.outputs.run == 'true'
+        run: uv run bfp collect --runner actions --slot "${{ steps.gate.outputs.slot }}"
+
+      - name: Health report (+ Telegram alert)
+        if: steps.gate.outputs.run == 'true' && always()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: uv run bfp health --alert | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit data
+        if: steps.gate.outputs.run == 'true' && always()
+        run: |
+          git config user.name "bfp-collector"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/observations data/health data/state
+          if git diff --cached --quiet; then echo "nothing to commit"; exit 0; fi
+          git commit -m "data: ${{ steps.gate.outputs.slot }} (actions)"
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash && git push && exit 0
+            sleep $((i * 15))
+          done
+          exit 1
+
+      - name: Upload failed-parse HTML (sanitised)
+        if: steps.gate.outputs.run == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-html-${{ steps.gate.outputs.slot }}
+          path: data/failed_html/
+          if-no-files-found: ignore
+          retention-days: 30

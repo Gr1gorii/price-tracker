@@ -1,0 +1,26 @@
+# Global collector settings.
+# The contact e-mail for the User-Agent is NOT stored here: set BFP_CONTACT_EMAIL
+# (locally in a .env file in the project root, on GitHub as a repository secret).
+contact_email: ""
+user_agent: "BFPriceTracker/{version} (+mailto:{email}; studio prezzi Black Friday)"
+
+timezone: Europe/Rome
+slots: [8, 20]              # local hours of the two daily runs
+slot_window_minutes: 210    # a slot may start up to 3.5 h late (GitHub cron delays)
+start_date: "2026-10-10"    # first expected slot, used for missing-slot reports
+
+min_interval_s: 5.0         # >= 5 s between requests to one domain (hard minimum)
+max_crawl_delay_s: 30.0     # robots.txt Crawl-delay above this -> warn, still honoured
+timeout_s: 30
+block_threshold: 3          # block signals (403/429/challenge) per run before a shop is stopped
+alert_threshold: 0.80       # Telegram alert if a shop's success rate drops below this
+max_failed_html_per_shop: 10
+max_response_mb: 15
+
+compliance:
+  window_days: 30
+  min_history_days: 25      # distinct days with an ok observation inside the window
+  reference_tolerance: 0.01 # displayed previous price may exceed true_low30 by <= 1 %
+  bump_threshold: 0.10      # price raised >= 10 % inside the window
+  episode_prev_tolerance: 0.01
+  in_stock_only: true       # out-of-stock prices are not "applied" prices

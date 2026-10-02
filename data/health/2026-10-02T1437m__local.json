@@ -1,0 +1,53 @@
+{
+  "run_id": "2026-10-02T1437m__local",
+  "slot": "2026-10-02T1437m",
+  "runner": "local",
+  "scheduled": false,
+  "started_at": "2026-10-02T12:37:43+00:00",
+  "finished_at": "2026-10-02T12:38:48+00:00",
+  "collector_version": "0.1.0",
+  "shops": {
+    "euronics": {
+      "counts": {
+        "ok": 10
+      },
+      "total": 10,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 11,
+      "seconds": 51.0,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-02/1437m__local__euronics.parquet"
+    },
+    "notino": {
+      "counts": {
+        "ok": 2
+      },
+      "total": 2,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 3,
+      "seconds": 10.2,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-02/1437m__local__notino.parquet"
+    },
+    "toyscenter": {
+      "counts": {
+        "ok": 10
+      },
+      "total": 10,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 14,
+      "seconds": 65.1,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-02/1437m__local__toyscenter.parquet"
+    }
+  }
+}

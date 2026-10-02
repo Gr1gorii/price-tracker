@@ -1,0 +1,46 @@
+{
+  "princess-182626-classic-family-castel-acciaio-102008189-html": {
+    "url": "https://www.euronics.it/elettrodomestici/cucina---cottura-cibi/friggitrici/princess---182626-classic-family-castel-acciaio/102008189.html",
+    "status": "ok",
+    "parse_method": "jsonld",
+    "price": "49.90",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": "50.90",
+    "displayed_low30_price": null,
+    "displayed_discount_pct": null,
+    "availability": "InStock"
+  },
+  "friggitrici-de-longhi-f-28211-roto-fry-bianco-112019550-html": {
+    "url": "https://www.euronics.it/elettrodomestici/cucina---cottura-cibi/friggitrici/de-longhi---f-28211-roto-fry-bianco/112019550.html",
+    "status": "ok",
+    "parse_method": "jsonld",
+    "price": "139.00",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": "179.99",
+    "displayed_low30_price": null,
+    "displayed_discount_pct": null,
+    "availability": "InStock"
+  },
+  "olvere-robot-d10-plus-combo-3-dust-bag-bianco-232011936-html": {
+    "url": "https://www.euronics.it/elettrodomestici/pulizia--stiro-e-cucito/aspirapolvere-robot/dreame---aspirapolvere-robot-d10-plus-combo-3-dust-bag-bianco/232011936.html",
+    "status": "ok",
+    "parse_method": "jsonld",
+    "price": "306.00",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": null,
+    "displayed_low30_price": null,
+    "displayed_discount_pct": null,
+    "availability": "InStock"
+  },
+  "e-a-traino-ariete-red-compact-2753-nero-rosso-162008671-html": {
+    "url": "https://www.euronics.it/elettrodomestici/pulizia--stiro-e-cucito/aspirapolvere-a-traino/ariete---red-compact-2753-nero--rosso/162008671.html",
+    "status": "ok",
+    "parse_method": "jsonld",
+    "price": "79.90",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": "90.00",
+    "displayed_low30_price": null,
+    "displayed_discount_pct": null,
+    "availability": "InStock"
+  }
+}

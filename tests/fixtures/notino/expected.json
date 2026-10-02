@@ -1,0 +1,24 @@
+{
+  "tino-it-4711-remix-lemon-acqua-di-colonia-unisex-p-16031241": {
+    "url": "https://www.notino.it/4711/remix-lemon-acqua-di-colonia-unisex/p-16031241/",
+    "status": "ok",
+    "parse_method": "css",
+    "price": "18.50",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": null,
+    "displayed_low30_price": "17.00",
+    "displayed_discount_pct": null,
+    "availability": "InStock"
+  },
+  "www-notino-it-3ina-the-lipstick-rossetto": {
+    "url": "https://www.notino.it/3ina/the-lipstick-rossetto/",
+    "status": "ok",
+    "parse_method": "css",
+    "price": "16.00",
+    "displayed_prev_price": null,
+    "displayed_rrp_price": null,
+    "displayed_low30_price": "15.00",
+    "displayed_discount_pct": null,
+    "availability": "InStock"
+  }
+}

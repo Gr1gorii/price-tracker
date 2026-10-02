@@ -1,0 +1,120 @@
+# One entry per shop. A shop is collected only when enabled: true —
+# set it after you have checked robots.txt and the terms of use yourself.
+#
+#   name:        short id used in products.csv ([a-z0-9_-])
+#   domain:      host of the product pages, e.g. www.example.it
+#   enabled:     false until manually checked
+#   render:      true only if prices need JavaScript (Playwright)
+#   runner:      actions (GitHub) | local (your Mac, for shops blocking datacenter IPs)
+#   notes:       what you checked and when
+#   product_url_pattern: regex for product URLs (used by `bfp sitemap`)
+#   wait_for:    CSS selector to wait for when render: true
+#   selectors:   CSS fallbacks; 'selector@attr' reads an attribute
+#     price, prev_price, low30_price, discount_pct, availability, out_of_stock, title
+shops:
+  - name: euronics
+    domain: www.euronics.it
+    enabled: true
+    render: false
+    runner: actions
+    notes: >-
+      2026-10-02 (pilot): robots.txt 200, 48 rules for '*', product pages allowed, no Crawl-delay.
+      Terms: only sales conditions + privacy + trademark clause; no site-use/automated-access restriction found.
+      Shows 'consigliato' (RRP) next to prices — not a previous price.
+    product_url_pattern: "/\\d{6,}\\.html$"
+    selectors:
+      rrp_price: "p.recomended-pdp .inner-price-details"
+
+  - name: toyscenter
+    domain: www.toyscenter.it
+    enabled: true
+    render: false
+    runner: actions
+    notes: >-
+      2026-10-02: robots.txt 200, 18 rules ('*orderby', '*filter'…), no Crawl-delay.
+      Terms of use (/terms-of-use/): personal non-commercial use, 'autorizzato unicamente a visualizzare',
+      no reproduction without written consent; no explicit robot/scraping clause.
+      2026-10-02: user decided to keep it in regular collection. '30-day lowest' is JS-loaded from the
+      shop's public endpoint below (robots-allowed) — fetched only when a discount is shown.
+    product_url_pattern: "/prodotto/[^/]+/?$"
+    selectors:
+      discount_pct: "[data-previous-price-container] [data-discount]"
+      rrp_price: "[data-recommended-price] span"
+      low30_price: 'span[x-text="$store.lowestPriceStore.price"]'
+    low30_api:
+      url: "https://www.toyscenter.it/wp-json/pnt/omnibus-directive/get-lowest-price/{id}"
+      id_regex: '<body[^>]*\bpostid-(\d+)'
+      price_path: lowestPrice.price
+      days_path: lowestPrice.days
+
+  - name: unieuro
+    domain: www.unieuro.it
+    enabled: false
+    notes: "2026-10-02: robots.txt 200, 4 rules (/online/cart, checkout, my-account, /api/). Terms not checked."
+  - name: mediaworld
+    domain: www.mediaworld.it
+    enabled: false
+    notes: "2026-10-02: robots.txt 200, Cloudflare (cdn-cgi rules) — expect bot protection / JS. Terms not checked."
+  - name: notino
+    domain: www.notino.it
+    enabled: true
+    render: false
+    runner: actions
+    notes: >-
+      2026-10-02: robots.txt 200, 29 rules. Terms: only sales conditions (/condizioni-generali/),
+      no site-use / automated-access clause found. Enabled 2026-10-02.
+      JSON-LD has GTIN; two offers per variant: regular price + 'con il codice' promo-code price → price
+      taken from pd-price (regular). '-N%' next to 'Prezzo attuale' is the CODE discount → not collected.
+      Use variant URLs (…/p-<id>/) in products.csv; sitemap also lists /recensioni/ pages → excluded.
+    product_url_pattern: "notino\\.it/(?!recensioni/)[^/]+/[^/]+/(p-\\d+/)?$"
+    selectors:
+      price: '[data-testid="pd-price"]@content'
+  - name: tigota
+    domain: www.tigota.it
+    enabled: true
+    render: false
+    runner: actions
+    product_url_pattern: "/p/[a-z0-9-]+-\\d{5,}$"
+    text_discount_fallback: true
+    notes: >-
+      2026-10-02: robots.txt 200, 6 rules (search/account/cart/checkout/wishlist). Terms: only sales conditions;
+      §1.3 allows storing/reproducing information provided on the site; no automated-access clause found.
+      Tech: JSON-LD price ok; '30 giorni' found by text fallback. Product URLs are NOT in the sitemap (/p/<slug>-<id>).
+      Prev price / -N% only under hashed MUI classes (brittle: 'p.mui-style-14tzo8q', 'h6.mui-style-1m3mg3l') →
+      taken by the consistency-checked text fallback instead. URLs via `bfp listing` from category pages. Enabled 2026-10-02.
+  - name: lookfantastic
+    domain: www.lookfantastic.it
+    enabled: true
+    render: false
+    runner: actions
+    product_url_pattern: "/p/[^/]+/\\d+/$"
+    selectors:
+      rrp_price: "#product-price .line-through"
+      discount_pct: "#product-price"
+    notes: >-
+      2026-10-02: robots.txt 200, 30 rules, product sitemap index. Terms §13: content may be viewed/saved/printed
+      for personal non-commercial use; no commercial reproduction; no explicit robot clause.
+      Tech: JSON-LD price (no GTIN). Product page shows 'PREZZO CONSIGLIATO' (struck, = RRP) + 'N% di sconto'
+      in #product-price; no '30-day lowest' shown. One URL = one size. Enabled 2026-10-02.
+  - name: sephora
+    domain: www.sephora.it
+    enabled: false
+    notes: "2026-10-02: robots.txt answered 403 to our User-Agent → treated as blocked. Do not enable."
+  - name: limoni
+    domain: www.limoni.it
+    enabled: false
+    notes: "2026-10-02: robots.txt answered 403 (also www.lagardenia.com) → treated as blocked. Do not enable."
+  - name: pinalli
+    domain: www.pinalli.it
+    enabled: false
+    notes: >-
+      2026-10-02: robots.txt 200, product sitemaps listed. Note legali §3.1: content for personal non-commercial
+      use only, no copying/exploiting content; no explicit robot clause.
+  - name: expert
+    domain: www.expert.it
+    enabled: false
+    notes: "2026-10-02: robots.txt Crawl-delay: 100 → ~36 pages/hour, unusable at scale."
+  - name: douglas
+    domain: www.douglas.it
+    enabled: false
+    notes: "2026-10-02: robots.txt answered 403 to our User-Agent → treated as blocked. Do not enable."
