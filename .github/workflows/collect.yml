@@ -1,14 +1,13 @@
 name: collect
 
-# GitHub cron is UTC-only and often late. We fire at every UTC hour that can be
-# 08:00 / 20:00 Europe/Rome (CEST = UTC+2 until 25 Oct 2026, CET = UTC+1 after)
-# plus a backup firing; `bfp gate` decides in Rome time and runs each slot once.
+# GitHub cron is UTC-only and often late or dropped (worst at the top of the hour), so we
+# fire at :17 four times around each Rome slot (CEST = UTC+2 until 25 Oct 2026, CET = UTC+1
+# after); `bfp gate` decides in Rome time and collects each slot once — extra firings are
+# ~15 s no-ops. The local runner also queues this workflow at the start of each slot.
 on:
   schedule:
-    - cron: "0 6,7 * * *"   # 08:00 Rome in CEST / CET
-    - cron: "40 8 * * *"    # backup: 10:40 CEST / 09:40 CET
-    - cron: "0 18,19 * * *" # 20:00 Rome in CEST / CET
-    - cron: "40 20 * * *"   # backup: 22:40 CEST / 21:40 CET
+    - cron: "17 6,7,8,9 * * *"     # 08:17–11:17 CEST / 07:17–10:17 CET (window 08:00–11:30)
+    - cron: "17 18,19,20,21 * * *" # 20:17–23:17 CEST / 19:17–22:17 CET (window 20:00–23:30)
   workflow_dispatch:
     inputs:
       force:

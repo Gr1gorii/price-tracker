@@ -70,9 +70,10 @@ uv run bfp unblock <shop>                    # after re-checking a shop that blo
 
 ### Schedule (GitHub Actions)
 
-`.github/workflows/collect.yml` fires at 06, 07, 08:40, 18, 19, 20:40 UTC. `bfp gate`
-converts to Europe/Rome (handles CEST→CET on 25 Oct 2026) and collects only inside the
-08:00 / 20:00 windows (+3.5 h for GitHub delays), once per slot. Data is committed back
+`.github/workflows/collect.yml` fires at :17 past 06–09 and 18–21 UTC (GitHub cron is often
+late at the top of the hour). `bfp gate` converts to Europe/Rome (handles CEST→CET on 25 Oct
+2026) and collects only inside the 08:00 / 20:00 windows (+3.5 h for GitHub delays), once per
+slot. The local runner additionally queues the workflow at the start of each slot. Data is committed back
 to the repo by the workflow.
 
 Repo setup: push this folder to GitHub, then in *Settings → Actions → General* allow

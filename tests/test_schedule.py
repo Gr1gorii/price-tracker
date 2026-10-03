@@ -36,7 +36,7 @@ def test_current_slot(settings, when, expected):
 
 def test_every_cron_firing_maps_to_each_slot_exactly_once(settings):
     """The workflow cron set must hit every slot both in CEST and CET."""
-    crons = ["06:00", "07:00", "08:40", "18:00", "19:00", "20:40"]
+    crons = [f"{h:02d}:17" for h in (6, 7, 8, 9, 18, 19, 20, 21)]
     for day in ("2026-10-12", "2026-11-12"):
         labels = {current_slot(settings, utc(f"{day} {t}")) for t in crons} - {None}
         assert {s.label for s in labels} == {f"{day}T08", f"{day}T20"}
