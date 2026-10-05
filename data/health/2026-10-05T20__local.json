@@ -1,0 +1,40 @@
+{
+  "run_id": "2026-10-05T20__local",
+  "slot": "2026-10-05T20",
+  "runner": "local",
+  "scheduled": true,
+  "started_at": "2026-10-05T18:05:12+00:00",
+  "finished_at": "2026-10-05T19:57:27+00:00",
+  "collector_version": "0.1.0",
+  "shops": {
+    "notino": {
+      "counts": {
+        "ok": 342,
+        "parse_failed": 7
+      },
+      "total": 349,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 350,
+      "seconds": 1749.7,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-05/20__local__notino.parquet"
+    },
+    "toyscenter": {
+      "counts": {
+        "ok": 347
+      },
+      "total": 347,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 10.0,
+      "requests": 674,
+      "seconds": 6735.3,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-05/20__local__toyscenter.parquet"
+    }
+  }
+}
