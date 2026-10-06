@@ -153,6 +153,12 @@ def _offers_of(product: dict) -> list[dict]:
     return flat
 
 
+def _same_variant(offer: dict, product_sku: str | None) -> bool:
+    """A product-level GTIN describes the product-level sku; offers of other skus are other variants."""
+    osku = _text(offer.get("sku"))
+    return not (osku and product_sku and osku != product_sku)
+
+
 def candidates_from(products: list[dict], machine: bool = True) -> list[OfferCandidate]:
     cands: list[OfferCandidate] = []
     for i, prod in enumerate(products):
@@ -184,7 +190,7 @@ def candidates_from(products: list[dict], machine: bool = True) -> list[OfferCan
                     availability=normalize_availability(o.get("availability") or prod.get("availability")),
                     url=_text(o.get("url")) or _text(prod.get("url")),
                     sku=_text(o.get("sku")) or p_sku,
-                    gtin=_gtin(o) or p_gtin,
+                    gtin=_gtin(o) or (p_gtin if _same_variant(o, p_sku) else None),
                     title=title,
                     strike_price=spec_strike,
                     rrp_price=spec_rrp,
@@ -195,22 +201,41 @@ def candidates_from(products: list[dict], machine: bool = True) -> list[OfferCan
 
 
 def _norm_url(u: str | None) -> str | None:
+    """Path + query only: offer URLs in JSON-LD are often relative, and the host is the shop's anyway."""
     if not u:
         return None
     p = urlsplit(u)
-    host = p.netloc.lower().removeprefix("www.")
-    return urlunsplit(("", host, p.path.rstrip("/"), p.query, ""))
+    return urlunsplit(("", "", p.path.rstrip("/") or "/", p.query, ""))
+
+
+def _one_variant(cands: list[OfferCandidate]) -> bool:
+    return len({c.sku for c in cands}) == 1 and len({_norm_url(c.url) for c in cands if c.url}) <= 1
 
 
 def select_offer(
-    cands: list[OfferCandidate], page_urls: list[str], ean: str | None
+    cands: list[OfferCandidate], page_urls: list[str], ean: str | None, tiebreak: str = "none"
 ) -> tuple[OfferCandidate | None, str | None]:
-    """Pick the offer of *this* page; returns (offer, error)."""
+    """Pick the offer of *this* page; returns (offer, error).
+
+    tiebreak (per shop): when the remaining offers are all the SAME variant but carry two prices
+    (e.g. Notino: regular + promo-code price), take the max ("max") or min ("min"). Never applied
+    across different variants.
+    """
     priced = [c for c in cands if c.price is not None]
     if not priced:
         return None, "no priced offer" if cands else "no offer"
     if len({c.price for c in priced}) == 1:
         return priced[0], None
+
+    def decide(hits: list[OfferCandidate]) -> OfferCandidate | None:
+        if hits and len({c.price for c in hits}) == 1:
+            return hits[0]
+        if hits and tiebreak in ("max", "min") and _one_variant(hits):
+            return (max if tiebreak == "max" else min)(hits, key=lambda c: c.price)
+        return None
+
+    if (hit := decide(priced)) is not None:
+        return hit, None
     filters = []
     if ean:
         filters.append(lambda c: c.gtin == ean)
@@ -218,9 +243,8 @@ def select_offer(
     filters.append(lambda c: _norm_url(c.url) in norm_pages)
     filters.append(lambda c: bool(c.sku) and any(c.sku.lower() in u.lower() for u in page_urls))
     for f in filters:
-        hits = [c for c in priced if f(c)]
-        if hits and len({c.price for c in hits}) == 1:
-            return hits[0], None
+        if (hit := decide([c for c in priced if f(c)])) is not None:
+            return hit, None
     return None, f"ambiguous: {len({c.price for c in priced})} different prices"
 
 
@@ -259,14 +283,15 @@ def extract(html: str, url: str, ld_scripts: list[str]) -> tuple[list, list]:
     return jsonld, micro
 
 
-def from_items(items: list, page_urls: list[str], ean: str | None, machine: bool = True) -> StructuredResult:
+def from_items(items: list, page_urls: list[str], ean: str | None, machine: bool = True,
+               tiebreak: str = "none") -> StructuredResult:
     products = find_products(items)
     res = StructuredResult(n_products=len(products))
     if not products:
         res.error = "no Product"
         return res
     cands = candidates_from(products, machine)
-    offer, err = select_offer(cands, page_urls, ean)
+    offer, err = select_offer(cands, page_urls, ean, tiebreak)
     if offer is None:
         res.error = err
         first = products[0]

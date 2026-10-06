@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import re
 import time
 from collections import Counter
 from dataclasses import dataclass, field
@@ -70,11 +71,13 @@ def _row(run_id: str, slot: Slot, shop: Shop, p: Product, **kw) -> dict:
     return row
 
 
-def _redirected_away(original: str, final: str) -> bool:
+def _redirected_away(original: str, final: str, product_pattern: str | None = None) -> bool:
     """Product URL redirected to home/category -> the product is gone."""
     a, b = urlsplit(original), urlsplit(final)
     if a.path.rstrip("/") == b.path.rstrip("/"):
         return False
+    if product_pattern and not re.search(product_pattern, final):
+        return True  # landed on something that is not a product page (e.g. its category)
     return b.path.strip("/") == "" or len(b.path.strip("/").split("/")) < len(a.path.strip("/").split("/")) - 1
 
 
@@ -190,7 +193,7 @@ async def _collect_one(cfg, paths, shop, p, slot, run_id, fetcher: Fetcher, robo
         return _row(run_id, slot, shop, p, status="http_error", error=f"HTTP {res.status}", **base)
     html = res.text or ""
     parsed = parse_page(html, p.url, shop, ean=p.ean, final_url=res.final_url)
-    if parsed.status != "ok" and res.final_url != p.url and _redirected_away(p.url, res.final_url):
+    if parsed.status != "ok" and res.final_url != p.url and _redirected_away(p.url, res.final_url, shop.product_url_pattern):
         return _row(run_id, slot, shop, p, status="not_found", error=f"redirected to {res.final_url}", **base)
     row = _row(
         run_id, slot, shop, p,

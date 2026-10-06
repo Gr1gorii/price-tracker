@@ -143,3 +143,25 @@ def test_low30_phrases():
     }
     for text, exp in cases.items():
         assert low30_from_text(text) == exp, text
+
+
+NOTINO_LIKE = """<html><head><script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Product","name":"Rossetto","sku":"R02","gtin13":"8809820695807",
+ "offers":[
+  {"@type":"Offer","sku":"R02","url":"/r/p-2/","price":11.47,"priceCurrency":"EUR","priceValidUntil":"2026-10-08"},
+  {"@type":"Offer","sku":"R05","url":"/r/p-5/","price":11.47,"priceCurrency":"EUR","priceValidUntil":"2026-10-08"},
+  {"@type":"Offer","sku":"R02","url":"/r/p-2/","price":13.50,"priceCurrency":"EUR"},
+  {"@type":"Offer","sku":"R05","url":"/r/p-5/","price":14.90,"priceCurrency":"EUR"}]}
+</script></head><body><h1>Rossetto</h1></body></html>"""
+
+
+def test_product_gtin_belongs_to_default_variant_and_tiebreak_takes_regular_price():
+    shop = Shop(name="n", domain="www.shop.test", offer_tiebreak="max")
+    r = parse_page(NOTINO_LIKE, "https://www.shop.test/r/", shop, ean="8809820695807")
+    assert r.status == "ok" and r.price == D("13.50")  # regular price of variant R02, not the code price
+    r2 = parse_page(NOTINO_LIKE, "https://www.shop.test/r/p-5/", shop)
+    assert r2.price == D("14.90")  # selected by variant URL
+    # no tiebreak across different variants, and none without the shop option
+    assert parse_page(NOTINO_LIKE, "https://www.shop.test/r/", shop).status == "parse_failed"
+    assert parse_page(NOTINO_LIKE, "https://www.shop.test/r/", Shop(name="x", domain="www.shop.test"),
+                      ean="8809820695807").status == "parse_failed"

@@ -61,6 +61,7 @@ shops:
     enabled: true
     render: false
     runner: local         # 2026-10-02: GitHub (datacenter) IPs get 403 on the first request; home IP works
+    offer_tiebreak: max   # each variant has a regular offer + a lower 'con il codice' offer → regular
     notes: >-
       2026-10-02: robots.txt 200, 29 rules. Terms: only sales conditions (/condizioni-generali/),
       no site-use / automated-access clause found. Enabled 2026-10-02.

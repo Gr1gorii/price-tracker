@@ -50,7 +50,7 @@ def parse_page(html: str, url: str, shop: Shop, ean: str | None = None, final_ur
     errors: list[str] = []
     sres: structured.StructuredResult | None = None
     for method, items, machine in (("jsonld", jsonld, True), ("microdata", micro, False)):
-        r = structured.from_items(items, page_urls, ean, machine=machine)
+        r = structured.from_items(items, page_urls, ean, machine=machine, tiebreak=shop.offer_tiebreak)
         if r.price is not None:
             sres, res.parse_method = r, method
             break

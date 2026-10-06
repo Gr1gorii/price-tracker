@@ -91,6 +91,14 @@ def test_block_stops_shop_and_persists(project, cfg, clock):
     assert pages.call_count == 2
 
 
+def test_redirect_to_category_is_not_found():
+    from bfp.collect import _redirected_away
+    pat = r"/prodotto/[^/]+/?$"
+    assert _redirected_away("https://s.it/prodotto/lego-1/", "https://s.it/categoria-prodotto/giocattoli/mattoncini/", pat)
+    assert not _redirected_away("https://s.it/prodotto/lego-1/", "https://s.it/prodotto/lego-1-new/", pat)
+    assert _redirected_away("https://s.it/a/b/c/d", "https://s.it/")
+
+
 def test_runner_and_enabled_selection(project):
     cfg = load_config(project)
     from bfp.collect import select_shops

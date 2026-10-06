@@ -133,6 +133,7 @@ class Shop(BaseModel):
     selectors: Selectors = Field(default_factory=Selectors)
     low30_api: Low30Api | None = None
     text_discount_fallback: bool = False  # 'X € -N% Y €' next to the price, consistency-checked
+    offer_tiebreak: Literal["none", "max", "min"] = "none"  # same variant, two prices (regular + code)
 
     @field_validator("domain")
     @classmethod
