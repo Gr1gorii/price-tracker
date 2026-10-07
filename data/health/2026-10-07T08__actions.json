@@ -1,0 +1,53 @@
+{
+  "run_id": "2026-10-07T08__actions",
+  "slot": "2026-10-07T08",
+  "runner": "actions",
+  "scheduled": true,
+  "started_at": "2026-10-07T06:05:24+00:00",
+  "finished_at": "2026-10-07T06:46:57+00:00",
+  "collector_version": "0.1.0",
+  "shops": {
+    "euronics": {
+      "counts": {
+        "ok": 495
+      },
+      "total": 495,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 499,
+      "seconds": 2493.4,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-07/08__actions__euronics.parquet"
+    },
+    "lookfantastic": {
+      "counts": {
+        "ok": 273
+      },
+      "total": 273,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 274,
+      "seconds": 1366.6,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-07/08__actions__lookfantastic.parquet"
+    },
+    "tigota": {
+      "counts": {
+        "ok": 320
+      },
+      "total": 320,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 321,
+      "seconds": 1603.0,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-07/08__actions__tigota.parquet"
+    }
+  }
+}
