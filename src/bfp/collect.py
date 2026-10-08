@@ -8,7 +8,7 @@ import re
 import time
 from collections import Counter
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Callable
 from urllib.parse import urlsplit
 
@@ -162,6 +162,9 @@ async def run_shop(
 
     if out.stopped_reason and block_signals >= st.block_threshold:
         storage.mark_blocked(paths, shop.name, run_id, out.stopped_reason)
+    elif shop.name in storage.load_blocked(paths) and any(r["status"] == "ok" for r in out.rows):
+        storage.unblock(paths, shop.name)
+        log.warning("%s: answering again — unblocked", shop.name)
     out.seconds = round(time.monotonic() - t0, 1)
     if out.rows:
         out.file = storage.write_observations(paths, slot, runner, shop.name, out.rows).relative_to(paths.root).as_posix()
@@ -241,8 +244,13 @@ async def run_collection(
     for shop in shops:
         products = cfg.products_for(shop.name)[: limit or None]
         if shop.name in blocked:
-            runs.append(ShopRun(shop.name, skipped_reason=f"blocked since {blocked[shop.name]['since']} — see data/state/blocked.json"))
-            continue
+            info = blocked[shop.name]
+            last = datetime.fromisoformat(info.get("last_check") or info["since"])
+            if started - last < timedelta(hours=cfg.settings.blocked_retry_hours):
+                runs.append(ShopRun(shop.name, skipped_reason=f"blocked since {info['since']} — see data/state/blocked.json"))
+                continue
+            # One retry per slot: run_shop fetches robots.txt first and stops at once if still blocked.
+            log.info("%s: blocked since %s — retrying once", shop.name, info["since"])
         if not products:
             runs.append(ShopRun(shop.name, skipped_reason="no products in products.csv"))
             continue

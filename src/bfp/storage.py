@@ -129,8 +129,13 @@ def load_blocked(paths: Paths) -> dict[str, dict]:
 
 
 def mark_blocked(paths: Paths, shop: str, run_id: str, reason: str) -> None:
+    """First block sets `since`; later failed retries only update `last_check` / `retries`."""
     data = load_blocked(paths)
-    data.setdefault(shop, {"since": datetime.now(timezone.utc).isoformat(timespec="seconds"), "run_id": run_id, "reason": reason})
+    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    entry = data.setdefault(shop, {"since": now, "run_id": run_id, "reason": reason, "retries": 0})
+    entry["last_check"] = now
+    entry["retries"] = entry.get("retries", 0) + (0 if entry["since"] == now else 1)
+    entry["last_reason"] = reason
     paths.state.mkdir(parents=True, exist_ok=True)
     blocked_path(paths).write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 

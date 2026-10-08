@@ -205,3 +205,28 @@ def test_low30_api_fills_value(project, clock, settings):
     assert str(a.value) == "1382.49" and a.error is None
     assert b.value is None and "60 days" in b.error
     assert c.value is None and "id not found" in c.error and not c.requested
+
+
+@respx.mock
+def test_blocked_shop_is_retried_once_per_slot_and_unblocked(project, cfg, clock):
+    import json
+    from datetime import datetime, timedelta, timezone
+    robots = respx.get("https://www.shop.test/robots.txt").mock(return_value=httpx.Response(403))
+    factory = lambda iv: DomainLimiter(iv, clock=clock, sleep=clock.sleep)  # noqa: E731
+    asyncio.run(run_collection(cfg, project, SLOT, "actions", limiter_factory=factory))
+    assert "testshop" in load_blocked(project) and robots.call_count == 1
+
+    # same slot later: within retry interval -> skipped, no request
+    later = Slot("2026-10-10T20", date(2026, 10, 10), True)
+    m = asyncio.run(run_collection(cfg, project, later, "actions", limiter_factory=factory))
+    assert m["shops"]["testshop"]["skipped_reason"].startswith("blocked since") and robots.call_count == 1
+
+    # 12 h later the shop answers again -> retried, collected, unblocked
+    data = load_blocked(project)
+    data["testshop"]["last_check"] = (datetime.now(timezone.utc) - timedelta(hours=12)).isoformat()
+    (project.state / "blocked.json").write_text(json.dumps(data))
+    robots.mock(return_value=httpx.Response(200, text=ROBOTS))
+    _mock_shop([], clock)
+    nxt = Slot("2026-10-11T08", date(2026, 10, 11), True)
+    m = asyncio.run(run_collection(cfg, project, nxt, "actions", limiter_factory=factory))
+    assert m["shops"]["testshop"]["counts"].get("ok") == 1 and "testshop" not in load_blocked(project)

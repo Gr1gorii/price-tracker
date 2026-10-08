@@ -53,6 +53,7 @@ class Settings(BaseModel):
     max_crawl_delay_s: float = 30.0
     timeout_s: float = 30.0
     block_threshold: int = 3
+    blocked_retry_hours: float = 11.0  # a blocked shop gets ONE polite retry (robots.txt first) per slot
     alert_threshold: float = 0.80
     max_failed_html_per_shop: int = 10
     max_response_mb: int = 15

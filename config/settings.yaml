@@ -14,6 +14,7 @@ min_interval_s: 5.0         # >= 5 s between requests to one domain (hard minimu
 max_crawl_delay_s: 30.0     # robots.txt Crawl-delay above this -> warn, still honoured
 timeout_s: 30
 block_threshold: 3          # block signals (403/429/challenge) per run before a shop is stopped
+blocked_retry_hours: 11     # a blocked shop gets one polite retry (robots.txt first) per slot
 alert_threshold: 0.80       # Telegram alert if a shop's success rate drops below this
 max_failed_html_per_shop: 10
 max_response_mb: 15
