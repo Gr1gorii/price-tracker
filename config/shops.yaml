@@ -50,8 +50,22 @@ shops:
 
   - name: unieuro
     domain: www.unieuro.it
-    enabled: false
-    notes: "2026-10-02: robots.txt 200, 4 rules (/online/cart, checkout, my-account, /api/). Terms not checked."
+    enabled: true
+    render: false
+    runner: actions
+    notes: >-
+      2026-10-08: robots.txt 200, 4 rules. Terms: Condizioni di vendita have no automated-access clause;
+      'Avvertenza legale': site for personal purposes, no copying for commercial purposes, no robot clause
+      (same grey zone as Toys Center/Lookfantastic, accepted by user). Added as toys replacement (LEGO sets
+      shared with Euronics). Angular SSR: no Product JSON-LD, prices in static HTML. Site states that the
+      'prezzo barrato' IS the lowest price of the previous 30 days.
+    product_url_pattern: "/online/[^/]+/[^/]+-pid[A-Z0-9]+$"
+    selectors:
+      price: "div.custom-price-container span.current-price"
+      prev_price: "div.custom-price-container span.previous-price"   # 'Prezzo precedente' = their 30-day low
+      rrp_price: "div.custom-price-container span.suggested-price"   # 'Prezzo consigliato' (RRP)
+      discount_pct: "div.custom-price-container span.discount"
+      title: "h1"
   - name: mediaworld
     domain: www.mediaworld.it
     enabled: false

@@ -14,6 +14,14 @@ on:
         description: "Collect now even outside a slot window"
         type: boolean
         default: false
+      shops:
+        description: "Only these shops (comma-separated, e.g. for a test); empty = all actions shops"
+        type: string
+        default: ""
+      limit:
+        description: "Max products per shop (test runs); empty = all"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -52,7 +60,10 @@ jobs:
 
       - name: Collect
         if: steps.gate.outputs.run == 'true'
-        run: uv run bfp collect --runner actions --slot "${{ steps.gate.outputs.slot }}"
+        run: >-
+          uv run bfp collect --runner actions --slot "${{ steps.gate.outputs.slot }}"
+          ${{ inputs.shops && format('--shops {0}', inputs.shops) || '' }}
+          ${{ inputs.limit && format('--limit {0}', inputs.limit) || '' }}
 
       - name: Health report (+ Telegram alert)
         if: steps.gate.outputs.run == 'true' && always()
