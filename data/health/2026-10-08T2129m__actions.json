@@ -1,0 +1,25 @@
+{
+  "run_id": "2026-10-08T2129m__actions",
+  "slot": "2026-10-08T2129m",
+  "runner": "actions",
+  "scheduled": false,
+  "started_at": "2026-10-08T19:29:24+00:00",
+  "finished_at": "2026-10-08T19:30:40+00:00",
+  "collector_version": "0.1.0",
+  "shops": {
+    "unieuro": {
+      "counts": {
+        "ok": 15
+      },
+      "total": 15,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 16,
+      "seconds": 75.3,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-08/2129m__actions__unieuro.parquet"
+    }
+  }
+}
