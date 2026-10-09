@@ -63,7 +63,7 @@ def _q(v: Decimal | None, places: str = "0.01") -> Decimal | None:
     return None if v is None else Decimal(v).quantize(Decimal(places))
 
 
-def write_observations(paths: Paths, slot: Slot, runner: str, shop: str, rows: list[dict]) -> Path:
+def write_observations(paths: Paths, slot: Slot, runner: str, shop: str, rows: list[dict], final: bool = True) -> Path:
     """One file per (slot, runner, shop); atomic rename so a crash never leaves half a file."""
     out_dir = slot_dir(paths.observations, slot)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -79,6 +79,8 @@ def write_observations(paths: Paths, slot: Slot, runner: str, shop: str, rows: l
     tmp = path.with_suffix(".parquet.tmp")
     pq.write_table(table, tmp, compression="zstd")
     os.replace(tmp, path)
+    if final:  # checkpoints (final=False) never mark a shop as done for the slot
+        path.with_suffix(".done").write_text("")
     return path
 
 

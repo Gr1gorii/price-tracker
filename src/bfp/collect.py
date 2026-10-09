@@ -154,7 +154,7 @@ async def run_shop(
                 if (i + 1) % 25 == 0:
                     log.info("%s: %d/%d %s", shop.name, i + 1, len(products), dict(Counter(r["status"] for r in out.rows)))
                 if (i + 1) % CHECKPOINT_EVERY == 0:  # survive a killed job (GitHub timeout)
-                    storage.write_observations(paths, slot, runner, shop.name, out.rows)
+                    storage.write_observations(paths, slot, runner, shop.name, out.rows, final=False)
         finally:
             if renderer_cm is not None:
                 await renderer_cm.__aexit__(None, None, None)

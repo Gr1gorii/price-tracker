@@ -2,6 +2,9 @@
   "toyscenter": {
     "since": "2026-10-07T18:05:14+00:00",
     "run_id": "2026-10-07T20__local",
-    "reason": "robots.txt request blocked"
+    "reason": "robots.txt request blocked",
+    "last_check": "2026-10-09T06:20:26+00:00",
+    "retries": 1,
+    "last_reason": "robots.txt request blocked"
   }
 }

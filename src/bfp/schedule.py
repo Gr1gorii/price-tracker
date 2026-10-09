@@ -58,7 +58,8 @@ def slot_dir(observations: Path, slot: Slot) -> Path:
 
 
 def shop_done(observations: Path, slot: Slot, runner: str, shop: str) -> bool:
-    return (slot_dir(observations, slot) / f"{slot.file_prefix}__{runner}__{shop}.parquet").exists()
+    """Done = the final write happened (a .done marker); checkpoint files alone don't count."""
+    return (slot_dir(observations, slot) / f"{slot.file_prefix}__{runner}__{shop}.done").exists()
 
 
 def run_done(health_dir: Path, slot: Slot, runner: str) -> bool:

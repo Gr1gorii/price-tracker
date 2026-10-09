@@ -66,9 +66,9 @@ def test_done_markers(tmp_path):
     assert run_done(tmp_path, slot, "actions") and not run_done(tmp_path, slot, "local")
     d = tmp_path / "date=2026-10-10"
     d.mkdir()
-    (d / "T08__actions__shop.parquet").write_text("")
-    assert not shop_done(tmp_path, slot, "actions", "shop")  # prefix is '08'
     (d / "08__actions__shop.parquet").write_text("")
+    assert not shop_done(tmp_path, slot, "actions", "shop")  # a checkpoint file alone is not "done"
+    (d / "08__actions__shop.done").write_text("")
     assert shop_done(tmp_path, slot, "actions", "shop")
 
 
