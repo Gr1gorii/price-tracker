@@ -3,8 +3,8 @@
     "since": "2026-10-07T18:05:14+00:00",
     "run_id": "2026-10-07T20__local",
     "reason": "robots.txt request blocked",
-    "last_check": "2026-10-09T19:04:04+00:00",
-    "retries": 2,
-    "last_reason": "3 block signals (last: HTTP 403)"
+    "last_check": "2026-10-10T18:05:12+00:00",
+    "retries": 3,
+    "last_reason": "robots.txt request blocked"
   }
 }
