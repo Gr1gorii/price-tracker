@@ -5,6 +5,8 @@
     "reason": "robots.txt request blocked",
     "last_check": "2026-10-11T06:05:09+00:00",
     "retries": 4,
-    "last_reason": "robots.txt request blocked"
+    "last_reason": "robots.txt request blocked",
+    "retry_after": "2026-10-16T05:30:00+00:00",
+    "note": "2026-10-11: user asked to pause retries for 5 days"
   }
 }

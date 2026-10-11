@@ -230,3 +230,17 @@ def test_blocked_shop_is_retried_once_per_slot_and_unblocked(project, cfg, clock
     nxt = Slot("2026-10-11T08", date(2026, 10, 11), True)
     m = asyncio.run(run_collection(cfg, project, nxt, "actions", limiter_factory=factory))
     assert m["shops"]["testshop"]["counts"].get("ok") == 1 and "testshop" not in load_blocked(project)
+
+
+@respx.mock
+def test_retry_after_pauses_retries(project, cfg, clock):
+    import json
+    from datetime import datetime, timedelta, timezone
+    robots = respx.get("https://www.shop.test/robots.txt").mock(return_value=httpx.Response(200, text=ROBOTS))
+    old = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat()
+    future = (datetime.now(timezone.utc) + timedelta(days=3)).isoformat()
+    project.state.mkdir(parents=True, exist_ok=True)
+    (project.state / "blocked.json").write_text(json.dumps({"testshop": {"since": old, "last_check": old, "retry_after": future}}))
+    factory = lambda iv: DomainLimiter(iv, clock=clock, sleep=clock.sleep)  # noqa: E731
+    m = asyncio.run(run_collection(cfg, project, SLOT, "actions", limiter_factory=factory))
+    assert "retry paused until" in m["shops"]["testshop"]["skipped_reason"] and robots.call_count == 0
