@@ -244,3 +244,17 @@ def test_retry_after_pauses_retries(project, cfg, clock):
     factory = lambda iv: DomainLimiter(iv, clock=clock, sleep=clock.sleep)  # noqa: E731
     m = asyncio.run(run_collection(cfg, project, SLOT, "actions", limiter_factory=factory))
     assert "retry paused until" in m["shops"]["testshop"]["skipped_reason"] and robots.call_count == 0
+
+
+@respx.mock
+def test_give_up_after_stops_retries(project, cfg, clock):
+    import json
+    from datetime import datetime, timedelta, timezone
+    robots = respx.get("https://www.shop.test/robots.txt").mock(return_value=httpx.Response(200, text=ROBOTS))
+    old = (datetime.now(timezone.utc) - timedelta(days=9)).isoformat()
+    past = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+    project.state.mkdir(parents=True, exist_ok=True)
+    (project.state / "blocked.json").write_text(json.dumps({"testshop": {"since": old, "last_check": old, "give_up_after": past}}))
+    factory = lambda iv: DomainLimiter(iv, clock=clock, sleep=clock.sleep)  # noqa: E731
+    m = asyncio.run(run_collection(cfg, project, SLOT, "actions", limiter_factory=factory))
+    assert "retries stopped after" in m["shops"]["testshop"]["skipped_reason"] and robots.call_count == 0

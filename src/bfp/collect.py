@@ -247,6 +247,10 @@ async def run_collection(
             info = blocked[shop.name]
             last = datetime.fromisoformat(info.get("last_check") or info["since"])
             pause = info.get("retry_after")  # set by hand: no retries before this moment
+            give_up = info.get("give_up_after")  # set by hand: no retries at all after this moment
+            if give_up and started > datetime.fromisoformat(give_up):
+                runs.append(ShopRun(shop.name, skipped_reason=f"blocked since {info['since']}, retries stopped after {give_up}"))
+                continue
             if pause and started < datetime.fromisoformat(pause):
                 runs.append(ShopRun(shop.name, skipped_reason=f"blocked since {info['since']}, retry paused until {pause}"))
                 continue
