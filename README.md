@@ -1,5 +1,7 @@
 # Are Black Friday discounts real? — Italy 2026
 
+Published report: [price-tracker](https://gr1gorii.github.io/price-tracker/)
+
 [![tests](https://github.com/Gr1gorii/price-tracker/actions/workflows/tests.yml/badge.svg)](https://github.com/Gr1gorii/price-tracker/actions/workflows/tests.yml)
 
 Since the EU Omnibus directive (Italy: art. 17-bis Codice del Consumo), an announced price
