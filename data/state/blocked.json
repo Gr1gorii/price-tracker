@@ -3,8 +3,8 @@
     "since": "2026-10-07T18:05:14+00:00",
     "run_id": "2026-10-07T20__local",
     "reason": "robots.txt request blocked",
-    "last_check": "2026-10-11T06:05:09+00:00",
-    "retries": 4,
+    "last_check": "2026-10-16T06:05:11+00:00",
+    "retries": 5,
     "last_reason": "robots.txt request blocked",
     "retry_after": "2026-10-16T05:30:00+00:00",
     "note": "2026-10-11: user asked to pause retries for 5 days"
