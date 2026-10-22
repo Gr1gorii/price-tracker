@@ -1,0 +1,69 @@
+{
+  "run_id": "2026-10-22T08__actions",
+  "slot": "2026-10-22T08",
+  "runner": "actions",
+  "scheduled": true,
+  "started_at": "2026-10-22T06:05:17+00:00",
+  "finished_at": "2026-10-22T07:04:37+00:00",
+  "collector_version": "0.1.0",
+  "shops": {
+    "euronics": {
+      "counts": {
+        "ok": 706
+      },
+      "total": 706,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 712,
+      "seconds": 3559.9,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-22/08__actions__euronics.parquet"
+    },
+    "lookfantastic": {
+      "counts": {
+        "ok": 272,
+        "not_found": 1
+      },
+      "total": 273,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 274,
+      "seconds": 1366.4,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-22/08__actions__lookfantastic.parquet"
+    },
+    "tigota": {
+      "counts": {
+        "ok": 320
+      },
+      "total": 320,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 321,
+      "seconds": 1615.5,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-22/08__actions__tigota.parquet"
+    },
+    "unieuro": {
+      "counts": {
+        "ok": 209,
+        "not_found": 1
+      },
+      "total": 210,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 212,
+      "seconds": 1114.0,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-10-22/08__actions__unieuro.parquet"
+    }
+  }
+}
