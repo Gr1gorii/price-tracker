@@ -21,7 +21,10 @@ LOG_DIR="$HOME/Library/Logs/bfp"; mkdir -p "$LOG_DIR"
     if [[ "${BFP_GIT_SYNC:-0}" == "1" ]]; then
       git add data/observations data/health data/state
       git diff --cached --quiet || git commit -q -m "data: local run $(date '+%F %H:%M')"
-      git pull -q --rebase --autostash && git push -q
+      for i in 1 2 3; do   # a concurrent fetch (IDE) can fail the pull on the ref lock
+        git pull -q --rebase --autostash && git push -q && break
+        sleep 30
+      done
     fi
   fi
 } >> "$LOG_DIR/collector.log" 2>&1
