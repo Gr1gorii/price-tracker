@@ -21,9 +21,13 @@ LOG_DIR="$HOME/Library/Logs/bfp"; mkdir -p "$LOG_DIR"
     if [[ "${BFP_GIT_SYNC:-0}" == "1" ]]; then
       git add data/observations data/health data/state
       git diff --cached --quiet || git commit -q -m "data: local run $(date '+%F %H:%M')"
-      for i in 1 2 3; do   # a concurrent fetch (IDE) can fail the pull on the ref lock
-        git pull -q --rebase --autostash && git push -q && break
-        sleep 30
+      # Fetch into FETCH_HEAD only (--refmap=): never updates refs/remotes/origin/main, so a
+      # background git client fetching at the same moment cannot fail us on the ref lock.
+      for i in 1 2 3; do
+        git fetch -q --refmap= origin main \
+          && { git rebase -q --autostash FETCH_HEAD || { git rebase --abort; false; }; } \
+          && git push -q origin HEAD:main && break
+        echo "git sync attempt $i failed, retrying"; sleep 30
       done
     fi
   fi
