@@ -289,5 +289,27 @@ def demo(seed: int = 7):
     _report_check(paths, cfg, compliance.prepare(df), obs, eps, None)
 
 
+@app.command()
+def hypotheses(
+    freeze: bool = typer.Option(False, help="Write config/frozen/*.csv from current data (once, never overwrites)"),
+):
+    """Pre-registered BF hypotheses (docs/hypotheses.md) → reports/hypotheses.md."""
+    from bfp import compliance
+    from bfp import hypotheses as hyp
+
+    paths, cfg = _setup()
+    df = compliance.load_ok_observations(paths)
+    if freeze:
+        for p in hyp.freeze(paths, df):
+            typer.echo(f"→ {p.relative_to(paths.root)}")
+    report, verdicts = hyp.run(paths, cfg.settings.compliance, df)
+    paths.reports.mkdir(parents=True, exist_ok=True)
+    out = paths.reports / "hypotheses.md"
+    out.write_text(report, encoding="utf-8")
+    for k, v in verdicts.items():
+        typer.echo(f"{k}: {v}")
+    typer.echo(f"→ {out.relative_to(paths.root)}")
+
+
 if __name__ == "__main__":
     sys.exit(app())

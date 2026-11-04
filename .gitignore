@@ -12,3 +12,4 @@ candidates/*.csv
 .env
 reports/health.md
 reports/demo/*.csv
+reports/hypotheses.md

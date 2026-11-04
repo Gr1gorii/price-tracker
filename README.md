@@ -18,6 +18,8 @@ respect that rule.
   GitHub Actions (twice-daily cron, DST-safe).
 
 Status: data collection (phase 1). Analysis and write-up after Black Friday.
+Hypotheses and their pass/fail thresholds were fixed on 4 Nov 2026, before any Black Friday
+data: [docs/hypotheses.md](docs/hypotheses.md).
 Charts in `reports/demo/` are generated from **synthetic** data to show the method.
 
 Only prices and product identifiers are stored — no personal data, no reviews.
@@ -67,6 +69,7 @@ uv run bfp health --runs 4                   # per-shop success table + missing 
 uv run bfp check --from 2026-11-20 --to 2026-11-30   # CSV + 3 PNGs in reports/
 uv run bfp sql "select shop, status, count(*) from observations group by all"
 uv run bfp demo                              # checker + charts on SYNTHETIC data → reports/demo/
+uv run bfp hypotheses                        # pre-registered hypotheses → reports/hypotheses.md
 uv run bfp unblock <shop>                    # after re-checking a shop that blocked us
 ```
 
