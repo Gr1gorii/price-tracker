@@ -6,6 +6,7 @@
 #   enabled:     false until manually checked
 #   render:      true only if prices need JavaScript (Playwright)
 #   runner:      actions (GitHub) | local (your Mac, for shops blocking datacenter IPs)
+#                | server (VPS, systemd timer; only after a probe from its IP)
 #   notes:       what you checked and when
 #   product_url_pattern: regex for product URLs (used by `bfp sitemap`)
 #   wait_for:    CSS selector to wait for when render: true
@@ -29,7 +30,8 @@ shops:
     domain: www.toyscenter.it
     enabled: true
     render: false
-    runner: local         # 2026-10-02: GitHub IPs got 403 after ~28 min (214 pages + 124 API calls)
+    runner: server        # 2026-11-05: full trial from the VPS = same as the Mac (341 ok, 6 not_found)
+                          # 2026-10-02: GitHub IPs got 403 after ~28 min (214 pages + 124 API calls)
     min_interval_s: 10    # heavier pages (2.5 MB) → slower than the 5 s minimum
     notes: >-
       2026-10-02: robots.txt 200, 18 rules ('*orderby', '*filter'…), no Crawl-delay.
