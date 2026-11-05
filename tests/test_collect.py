@@ -105,6 +105,7 @@ def test_runner_and_enabled_selection(project):
 
     assert [s.name for s in select_shops(cfg, "actions", None)] == ["testshop"]
     assert select_shops(cfg, "local", None) == []
+    assert select_shops(cfg, "server", None) == []
     try:
         select_shops(cfg, "actions", ["other"])
         raise AssertionError("disabled shop must be refused")

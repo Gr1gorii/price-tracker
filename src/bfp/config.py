@@ -125,7 +125,7 @@ class Shop(BaseModel):
     domain: str
     enabled: bool = False
     render: bool = False
-    runner: Literal["actions", "local"] = "actions"
+    runner: Literal["actions", "local", "server"] = "actions"
     notes: str = ""
     currency: str = "EUR"
     product_url_pattern: str | None = None

@@ -1,0 +1,12 @@
+[Unit]
+Description=BF price tracker: hourly tick (the gate collects only inside the 08:00 / 20:00 windows)
+
+[Timer]
+# server clock is Europe/Rome; same cadence as the local launchd agent
+OnCalendar=*-*-* *:05:00
+Persistent=true
+AccuracySec=30s
+Unit=bfp-collector.service
+
+[Install]
+WantedBy=timers.target

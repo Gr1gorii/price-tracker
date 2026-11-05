@@ -96,6 +96,25 @@ BFP_GIT_SYNC=1 ./scripts/run_local.sh   # one manual tick; with git commit/push
 Logs: `~/Library/Logs/bfp/collector.log`. The Mac must be awake (launchd runs missed
 firings on wake; the slot window is 3.5 h).
 
+### Server runner (a VPS that is never asleep)
+
+Shops with `runner: server` run on a small Linux VPS from a systemd timer (hourly at :05,
+same gate). One-time setup as root, checkout in `/srv/blackfriday/price-tracker` owned by
+an unprivileged `collector` user:
+
+```bash
+python3 -m venv /srv/blackfriday/tools && /srv/blackfriday/tools/bin/pip install uv
+ssh-keygen -t ed25519 -N '' -f /srv/blackfriday/.ssh/deploy_key   # add .pub as a repo deploy key (write)
+git clone git@github.com:<you>/price-tracker.git /srv/blackfriday/price-tracker
+git -C /srv/blackfriday/price-tracker config core.sshCommand \
+  "ssh -i /srv/blackfriday/.ssh/deploy_key -o IdentitiesOnly=yes -o UserKnownHostsFile=/srv/blackfriday/.ssh/known_hosts"
+cp scripts/systemd/bfp-collector.* /etc/systemd/system/ && systemctl enable --now bfp-collector.timer
+```
+
+`.env` in the checkout holds `BFP_CONTACT_EMAIL` (and optional `TELEGRAM_*`). Logs:
+`journalctl -u bfp-collector`. A datacenter IP is still a datacenter IP: shops that refuse
+GitHub's IPs may refuse the VPS too — probe first, never route around a block.
+
 ## Rules the collector enforces
 
 * ≥ 5 s between requests to one domain (robots.txt and redirect hops count); robots.txt

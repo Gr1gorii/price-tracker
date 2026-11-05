@@ -1,0 +1,21 @@
+[Unit]
+Description=BF price tracker: collector for runner=server shops
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=collector
+Group=collector
+WorkingDirectory=/srv/blackfriday/price-tracker
+Environment=HOME=/srv/blackfriday
+Environment=PATH=/srv/blackfriday/tools/bin:/usr/local/bin:/usr/bin:/bin
+Environment=UV_CACHE_DIR=/srv/blackfriday/.cache/uv
+Environment=UV_PYTHON_DOWNLOADS=never
+ExecStart=/srv/blackfriday/price-tracker/scripts/run_server.sh
+TimeoutStartSec=3h
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/blackfriday

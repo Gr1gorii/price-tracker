@@ -70,7 +70,7 @@ def estimate():
 
 @app.command()
 def gate(
-    runner: str = typer.Option("actions", help="actions | local"),
+    runner: str = typer.Option("actions", help="actions | local | server"),
     force: bool = typer.Option(False, help="Run now even outside a slot window (manual slot label)"),
 ):
     """For cron: is it time to collect? Prints run=… and slot=… (also to $GITHUB_OUTPUT)."""
@@ -98,7 +98,7 @@ def gate(
 @app.command()
 def collect(
     shops: Optional[str] = typer.Option(None, help="Comma-separated shop names (default: all enabled for this runner)"),
-    runner: str = typer.Option("local", help="actions | local"),
+    runner: str = typer.Option("local", help="actions | local | server"),
     slot: Optional[str] = typer.Option(None, help="Slot label from `bfp gate`; default: current slot or a manual label"),
     scheduled: bool = typer.Option(False, help="Apply the gate: collect only inside a slot window, once per slot"),
     limit: Optional[int] = typer.Option(None, help="Max products per shop"),
