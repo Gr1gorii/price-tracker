@@ -8,9 +8,9 @@
     <string>/bin/zsh</string>
     <string>__RUN_LOCAL__</string>
   </array>
-  <!-- every hour at minute 5; missed firings during sleep run on wake -->
+  <!-- every hour at minute 1, i.e. right at the pmset wakes (08:01 / 20:01); missed firings during sleep run on wake -->
   <key>StartCalendarInterval</key>
-  <dict><key>Minute</key><integer>5</integer></dict>
+  <dict><key>Minute</key><integer>1</integer></dict>
   <key>StandardOutPath</key><string>__LOG__</string>
   <key>StandardErrorPath</key><string>__LOG__</string>
   <key>ProcessType</key><string>Background</string>

@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Installs a launchd agent that runs scripts/run_local.sh every hour at :05.
+# Installs a launchd agent that runs scripts/run_local.sh every hour at :01.
 # Collection happens only inside the Rome slot windows (08:00 / 20:00), once per slot.
 # Uninstall: launchctl bootout gui/$(id -u)/it.bfp.collector && rm ~/Library/LaunchAgents/it.bfp.collector.plist
 set -eu

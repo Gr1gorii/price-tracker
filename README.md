@@ -89,12 +89,15 @@ one on the Free plan (~2000 min/month) will not fit 2 runs × ~40 min × 31 days
 ### Local runner (shops that block datacenter IPs)
 
 ```bash
-./scripts/install_local.sh          # launchd agent, hourly at :05, gate inside
+./scripts/install_local.sh          # launchd agent, hourly at :01, gate inside
 BFP_GIT_SYNC=1 ./scripts/run_local.sh   # one manual tick; with git commit/push
 ```
 
-Logs: `~/Library/Logs/bfp/collector.log`. The Mac must be awake (launchd runs missed
-firings on wake; the slot window is 3.5 h).
+Logs: `~/Library/Logs/bfp/collector.log`. The Mac may sleep between slots if it is woken
+for them, lid open (a closed lid falls straight back asleep): one-time events such as
+`sudo pmset schedule wakeorpoweron "11/06/2026 08:01:00"` for every slot. launchd fires at :01,
+i.e. right at the wake, and runs missed firings on the next wake (the slot window is 3.5 h).
+Each tick holds `caffeinate -is` and waits up to 2 min for the network after a wake.
 
 ### Server runner (a VPS that is never asleep)
 
