@@ -1,0 +1,25 @@
+{
+  "run_id": "2026-11-10T20__local",
+  "slot": "2026-11-10T20",
+  "runner": "local",
+  "scheduled": true,
+  "started_at": "2026-11-10T19:01:13+00:00",
+  "finished_at": "2026-11-10T19:30:26+00:00",
+  "collector_version": "0.1.0",
+  "shops": {
+    "notino": {
+      "counts": {
+        "ok": 349
+      },
+      "total": 349,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 5.0,
+      "requests": 351,
+      "seconds": 1752.7,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-11-10/20__local__notino.parquet"
+    }
+  }
+}

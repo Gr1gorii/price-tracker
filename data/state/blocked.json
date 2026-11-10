@@ -1,10 +1,1 @@
-{
-  "notino": {
-    "since": "2026-11-10T07:01:27+00:00",
-    "run_id": "2026-11-10T08__local",
-    "reason": "3 block signals (last: HTTP 403)",
-    "retries": 0,
-    "last_check": "2026-11-10T07:01:27+00:00",
-    "last_reason": "3 block signals (last: HTTP 403)"
-  }
-}
+{}
