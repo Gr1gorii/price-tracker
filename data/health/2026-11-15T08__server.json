@@ -1,0 +1,26 @@
+{
+  "run_id": "2026-11-15T08__server",
+  "slot": "2026-11-15T08",
+  "runner": "server",
+  "scheduled": true,
+  "started_at": "2026-11-15T07:05:02+00:00",
+  "finished_at": "2026-11-15T08:26:17+00:00",
+  "collector_version": "0.1.0",
+  "shops": {
+    "toyscenter": {
+      "counts": {
+        "ok": 337,
+        "not_found": 10
+      },
+      "total": 347,
+      "robots": "parsed",
+      "crawl_delay": null,
+      "interval_s": 10.0,
+      "requests": 488,
+      "seconds": 4875.1,
+      "stopped_reason": null,
+      "skipped_reason": null,
+      "file": "data/observations/date=2026-11-15/08__server__toyscenter.parquet"
+    }
+  }
+}
