@@ -4,7 +4,13 @@ name: collect
 # fire at :17 four times around each Rome slot (CEST = UTC+2 until 25 Oct 2026, CET = UTC+1
 # after); `bfp gate` decides in Rome time and collects each slot once — extra firings are
 # ~15 s no-ops. The local runner also queues this workflow at the start of each slot.
+# In Nov 2026 the cron fired ~2×/day, 5–7 h late (outside the windows), so the real triggers
+# are that dispatch and `push`: every data push from the Mac (~08:30) or the VPS (~10:00)
+# re-runs the gate. Pushes made by this workflow (GITHUB_TOKEN) never trigger a run.
 on:
+  push:
+    branches: [main]
+    paths: ["data/health/**"]
   schedule:
     - cron: "17 6,7,8,9 * * *"     # 08:17–11:17 CEST / 07:17–10:17 CET (window 08:00–11:30)
     - cron: "17 18,19,20,21 * * *" # 20:17–23:17 CEST / 19:17–22:17 CET (window 20:00–23:30)

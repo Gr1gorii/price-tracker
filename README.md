@@ -78,8 +78,9 @@ uv run bfp unblock <shop>                    # after re-checking a shop that blo
 `.github/workflows/collect.yml` fires at :17 past 06–09 and 18–21 UTC (GitHub cron is often
 late at the top of the hour). `bfp gate` converts to Europe/Rome (handles CEST→CET on 25 Oct
 2026) and collects only inside the 08:00 / 20:00 windows (+3.5 h for GitHub delays), once per
-slot. The local runner additionally queues the workflow at the start of each slot. Data is committed back
-to the repo by the workflow.
+slot. The local runner additionally queues the workflow at the start of each slot, and every data push
+from the Mac or the VPS (`data/health/**`) triggers it too — in practice the cron fires hours late.
+Data is committed back to the repo by the workflow.
 
 Repo setup: push this folder to GitHub, then in *Settings → Actions → General* allow
 "Read and write permissions". Secrets: `BFP_CONTACT_EMAIL` (required), `TELEGRAM_BOT_TOKEN` and
