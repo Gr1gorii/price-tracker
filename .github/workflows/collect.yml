@@ -43,7 +43,11 @@ jobs:
     env:
       BFP_CONTACT_EMAIL: ${{ secrets.BFP_CONTACT_EMAIL }}
     steps:
+      # Latest main, not the triggering commit: a run that waited in the concurrency queue must
+      # see the data the previous run pushed, or its gate re-collects a slot that is already done.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: astral-sh/setup-uv@v6
         with:
